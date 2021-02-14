@@ -31,8 +31,10 @@ RUN \
 
 # Kokotap
 RUN \
-  [[ "$TARGETARCH" == "amd64" ]] && \
+  if [ "$TARGETARCH" = "amd64" ]; then \
   curl -fsSLO https://github.com/redhat-nfvpe/kokotap/releases/download/v${KOKOTAP_VERSION}/kokotap_${KOKOTAP_VERSION}_linux_x86_64.tar.gz && \
-  tar xvf kokotap_${KOKOTAP_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin
+  tar xvf kokotap_${KOKOTAP_VERSION}_linux_x86_64.tar.gz -C /usr/local/bin ; \
+  fi
 
 CMD ["/bin/sh", "-c", "sleep 1000000000"]
+

@@ -101,7 +101,7 @@ jobs:
       - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
         uses: anchore/scan-action@main
         with:
-          image: steps.prep.outputs.tags
+          image: ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.docker_image }}
           acs-report-enable: true
       - name: Upload Anchore Scan Report
         uses: github/codeql-action/upload-sarif@v1
