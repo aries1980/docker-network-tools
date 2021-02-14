@@ -9,7 +9,7 @@ problems between pods, you need tools like `tcpdump`, `dig`, `ping` and friends.
 
 ## Examples
 
-* [K3s deployment to two separate nodes](https://github.com/aries1980/docker-network-tools/blob/main/examples/k3s-with-nodeselector.yaml)
+* [Kubernetes deployment to two separate nodes](https://github.com/aries1980/docker-network-tools/blob/main/examples/k8s-with-nodeselector.yaml)
 
 ## Testing
 
