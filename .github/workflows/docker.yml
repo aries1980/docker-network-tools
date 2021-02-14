@@ -97,20 +97,21 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: 'trivy-results.sarif'
-
       - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
         uses: anchore/scan-action@main
         with:
           image: ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
           acs-report-enable: true
-      - name: Upload Anchore Scan Report
+          fail-build: true
+          severity-cutoff: high
+      
+      - name: Move results into single directory
+        run: mkdir image_scan_results; mv results.sarif image_scan_results/ ; mv trivy-results.sarif image_scan_results/
+
+      - name: Upload Scan Reports
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: results.sarif
+          sarif_file: image_scan_results
 
       - name: Cached Build and Push
         uses: docker/build-push-action@v2
