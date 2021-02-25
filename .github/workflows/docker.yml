@@ -98,17 +98,6 @@ jobs:
           tags: ${{ steps.prep.outputs.testtag }}
 
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ steps.prep.outputs.testtag }}
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-
       - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
         uses: anchore/scan-action@main
         with:
@@ -116,14 +105,6 @@ jobs:
           acs-report-enable: true
           fail-build: true
           severity-cutoff: high
-
-      - name: Move results into single directory
-        run: mkdir image_scan_results; mv results.sarif image_scan_results/ ; mv trivy-results.sarif image_scan_results/
-
-      - name: Upload Scan Reports
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: image_scan_results
 
       - name: Cached Build and Push
         uses: docker/build-push-action@v2
@@ -149,3 +130,22 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: ${{ steps.prep.outputs.tags }}
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.prep.outputs.tag }}
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Move results into single directory
+        run: mkdir image_scan_results; mv results.sarif image_scan_results/ ; mv trivy-results.sarif image_scan_results/
+
+      - name: Upload Scan Reports
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: image_scan_results
