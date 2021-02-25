@@ -7,8 +7,8 @@ on:
     tags:
       - 'v*.*.*'
 
-  schedule:
-    - cron: "19 4 * * *" # everyday at 04:19
+#  schedule:
+#    - cron: "19 4 * * *" # everyday at 04:19
 
 jobs:
   docker-build:
@@ -23,7 +23,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=aries1980/network-tools
+          DOCKER_IMAGE=index.docker.io/aries1980/network-tools
           LAST_GIT_TAG=$(git describe --tags --abbrev=0)
           MAESTRAL_VERSION=${LAST_GIT_TAG:1}
           VERSION=noop
